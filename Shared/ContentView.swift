@@ -9,8 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+		TabView {
+			PostList()
+				.tabItem { Label("Posts", systemImage: "list.dash") }
+			
+			PostCreateDetail()
+				.tabItem { Label("New", systemImage: "plus") }
+			
+			VStack {
+				Text("Account").font(.headline)
+			}.tabItem { Label("Account", systemImage: "person.fill") }
+		}
     }
 }
 
