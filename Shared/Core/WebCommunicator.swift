@@ -112,7 +112,7 @@ struct WebCommunicator {
 
 import SerializedSwift
 
-class BackedObject: Serializable, Identifiable {
+class BackedObject: Serializable, Identifiable, Equatable {
 	@Serialized(default: 0)
 	var id: Int
 	
@@ -123,4 +123,8 @@ class BackedObject: Serializable, Identifiable {
 	var updatedAt: Date
 	
 	required init() {}
+	
+	static func == (lhs: BackedObject, rhs: BackedObject) -> Bool {
+		lhs.id == rhs.id && lhs.createdAt == rhs.createdAt
+	}
 }

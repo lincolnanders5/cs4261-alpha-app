@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PostCreateDetail: View {
 	@ObservedObject var pTitle = Observable<String>()
-	@ObservedObject var pBody = Observable<String>()
+	@ObservedObject var pBody  = Observable<String>()
 	
     var body: some View {
 		VStack(alignment: .leading, spacing: 10) {
@@ -20,7 +20,19 @@ struct PostCreateDetail: View {
 			Spacer()
 			
 			Button("Post", action: {
-				print(pTitle.value ?? "-Empty-", pBody.value ?? "-Empty-")
+				let body = [ "post": [ "title": pTitle.value ?? "", "body": pBody.value ?? "" ] ]
+				WebCommunicator.post(endpoint: "/posts", body: body, completion: { (post: Result<Post>) in
+					guard let createdPost = post.value else {
+						print("Could not create post")
+						return
+					}
+					
+					pTitle.value = ""
+					pBody.value = ""
+					
+					PostController.retain(createdPost)
+					return
+				})
 			})
 		}.padding()
     }

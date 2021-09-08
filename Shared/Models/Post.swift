@@ -29,4 +29,20 @@ class PostController {
 		WebCommunicator.get(endpoint: "\(baseURL)/\(id)", destination: result)
 		return result
 	}
+	
+	static func create(title: String, body: String) {
+		WebCommunicator.post(endpoint: baseURL, body: [ "post" : [ "title": title, "body": body ] ], completion: { (_: Result<Post>) in
+			return
+		})
+	}
+	
+	static func retain(_ item: Post) {
+		guard let all = PostController.all.value else {
+			PostController.all = Observable<[Post]>(value: [item])
+			return
+		}
+		guard all.contains(item) else { return }
+		
+		PostController.all.value!.append(item)
+	}
 }
