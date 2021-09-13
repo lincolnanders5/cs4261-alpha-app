@@ -20,12 +20,12 @@ class PostController {
 	
 	static func fetchAll() {
 		if all.value == nil {
-			WebCommunicator.get(endpoint: baseURL, destination: PostController.all)
+			WebCommunicator.get(endpoint: baseURL, destination: all)
 		}
 	}
 	
-	static func fetch(id: Int) -> Observable<Post> {
-		let result = Observable<Post>()
+	static func fetch(id: Int) -> Observable<BackedObject> {
+		let result = Observable<BackedObject>()
 		WebCommunicator.get(endpoint: "\(baseURL)/\(id)", destination: result)
 		return result
 	}
@@ -37,12 +37,12 @@ class PostController {
 	}
 	
 	static func retain(_ item: Post) {
-		guard let all = PostController.all.value else {
-			PostController.all = Observable<[Post]>(value: [item])
+		guard let allVal = all.value else {
+			all = Observable<[Post]>(value: [item])
 			return
 		}
-		guard all.contains(item) else { return }
+		guard allVal.contains(item) else { return }
 		
-		PostController.all.value!.append(item)
+		all.value!.append(item)
 	}
 }
