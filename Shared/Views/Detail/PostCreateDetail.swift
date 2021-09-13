@@ -31,6 +31,7 @@ struct PostCreateDetail: View {
 					pBody.value = ""
 					
 					PostController.retain(createdPost)
+					PostController.fetchAll()
 					return
 				})
 			})

@@ -19,13 +19,12 @@ class PostController {
 	public static var all = Observable<[Post]>()
 	
 	static func fetchAll() {
-		if all.value == nil {
-			WebCommunicator.get(endpoint: baseURL, destination: all)
-		}
+		WebCommunicator.get(endpoint: baseURL, destination: all)
+		all.objectWillChange.send()
 	}
 	
-	static func fetch(id: Int) -> Observable<BackedObject> {
-		let result = Observable<BackedObject>()
+	static func fetch(id: Int) -> Observable<Post> {
+		let result = Observable<Post>()
 		WebCommunicator.get(endpoint: "\(baseURL)/\(id)", destination: result)
 		return result
 	}
@@ -44,5 +43,6 @@ class PostController {
 		guard allVal.contains(item) else { return }
 		
 		all.value!.append(item)
+		all.objectWillChange.send()
 	}
 }
